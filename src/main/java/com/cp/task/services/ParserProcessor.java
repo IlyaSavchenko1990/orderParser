@@ -40,7 +40,7 @@ public class ParserProcessor {
         }
 
         ExecutorService pool = new ThreadPoolExecutor(
-                10,
+                3,
                 25,
                 60L, TimeUnit.SECONDS,
                 new SynchronousQueue<Runnable>());
