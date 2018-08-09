@@ -7,6 +7,7 @@ to a convenient application strcuture.
 
 To install this app you need to download this project and in cmd use maven "mvn package" comand. 
 App will be extracted into target folder of extracted project. 
+You have to use OrderParser-1.0-SNAPSHOT-jar-with-dependencies.jar file
 
 To run this application you have to use jvm commands in cmd - "java -jar app.jar". It receives files names to parse.
 For example, the command to start parsing files "order1.json", "order2.json", "order3.csv" is - 
