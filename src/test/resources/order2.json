@@ -1,0 +1,7 @@
+[{"orderId":11,"amount":1100,"currency":"USD","comment":"оплата заказа"},
+{"orderId":2,"amount":300,"currency":"RUR","comment":"оплата заказа"},
+{"orderId":5,"amount":5000,"currency":25,"comment":"оплата заказа"},
+{"orderId":"ab","amount":5000,"currency":"EUR","comment":"оплата заказа"},
+{"orderId":51,"amount":5000,"currency":"EUR"},
+{"orderId":"45","amount":5000,"currency":"UKR","comment":"оплата заказа"}
+]
