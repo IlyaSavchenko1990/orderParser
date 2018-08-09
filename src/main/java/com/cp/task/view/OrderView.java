@@ -14,13 +14,13 @@ import java.io.Serializable;
  */
 public class OrderView {
 
-    private int id;//идентификатор ордера
-    private int amount;//сумма ордера
-    private CurrencyEnum currency;//валюта суммы ордера
-    private String comment;//комментарий по ордеру
-    private String filename;//имя исходного файла
-    private int line;//номер строки исходного файла
-    private String result;//результат парсинга записи исходного файла
+    private int id;//Order id
+    private int amount;//Payment sum
+    private CurrencyEnum currency;//Currency of payment sum
+    private String comment;//Comment
+    private String filename;//Input file name
+    private int line;//Line number of order data in input file
+    private String result;//Parsing result: eq OK if no errors, error message otherwise
 
     public OrderView(String filename) {
         this.filename = filename;
