@@ -28,12 +28,24 @@ public class OutputService {
         }
     }
 
+    public void printExceptionMessage(String exceptionNote, Throwable throwable) {
+        print((exceptionNote != null ? exceptionNote + "; " : "") + String.format("Error: %s", throwable));
+    }
+
     public void filesIsEmpty() {
         print(ErrorMessagesEnum.emptyElements.getErrorMessage());
     }
 
-    public void wronfFileNameFormat(String fileName) {
+    public void unsupportedFileFormat(String fileName) {
+        print(ErrorMessagesEnum.unsupportedFileFormat.getErrorMessage() + " File name: " + fileName);
+    }
+
+    public void wrongFileNameFormat(String fileName) {
         print(ErrorMessagesEnum.wrongFileNameFormat.getErrorMessage() + " File name: " + fileName);
+    }
+
+    public void wrongFileFormat(String fileName) {
+        print(ErrorMessagesEnum.wrongFormat.getErrorMessage() + " File name: " + fileName);
     }
 
     public void fileNotFound(String fileName) {

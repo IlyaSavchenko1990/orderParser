@@ -1,13 +1,11 @@
 package com.cp.task.services;
 
-import com.cp.task.enums.ErrorMessagesEnum;
 import com.cp.task.enums.OrderFieldsEnum;
 import com.cp.task.view.OrderView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.concurrent.*;
@@ -47,18 +45,13 @@ public class ParserProcessor {
 
         try {
             for (String fileName : files) {
-                String[] fileNameParts = fileName.split("\\.");
-                if (fileNameParts.length < 2) {
-                    outputService.wronfFileNameFormat(fileName);
-                    continue;
-                }
                 if (!new File(fileName).exists()) {
                     outputService.fileNotFound(fileName);
                     continue;
                 }
 
                 Future<List<EnumMap<OrderFieldsEnum, Object>>> parseFuture = pool.submit(
-                        new ParseTask(fileNameParts[0], fileNameParts[1]));
+                        new ParseTask(fileName));
                 Future<List<OrderView>> convertFuture = pool.submit(
                         new ConvertTask(parseFuture));
 
@@ -71,30 +64,21 @@ public class ParserProcessor {
 
     private class ParseTask implements Callable<List<EnumMap<OrderFieldsEnum, Object>>> {
         private String fileName;
-        private String fileExtension;
 
-        ParseTask(String fileName, String fileExtension) {
+        ParseTask(String fileName) {
             this.fileName = fileName;
-            this.fileExtension = fileExtension;
         }
 
         @Override
         public List<EnumMap<OrderFieldsEnum, Object>> call() {
-            List<EnumMap<OrderFieldsEnum, Object>> ordersParsedData = new ArrayList<EnumMap<OrderFieldsEnum, Object>>();
-            try {
-                for (OrderParser parser : parsers) {
-                    if (parser.checkExtension(fileExtension))
-                        ordersParsedData.addAll(parser.parse(fileName + "." + fileExtension));
+            for (OrderParser parser : parsers) {
+                if (parser.checkFileExtension(fileName)) {
+                    return parser.parse(fileName);
                 }
-
-            } catch (Exception e) {
-                ordersParsedData.add(new EnumMap<OrderFieldsEnum, Object>(OrderFieldsEnum.class) {{
-                    put(OrderFieldsEnum.result, ErrorMessagesEnum.fileNotFound.getErrorMessage());
-                    put(OrderFieldsEnum.fileName, fileName);
-                }});
             }
 
-            return ordersParsedData;
+            outputService.unsupportedFileFormat(fileName);
+            return null;
         }
     }
 
@@ -107,7 +91,10 @@ public class ParserProcessor {
 
         @Override
         public List<OrderView> call() throws Exception {
-            return converter.convert(future.get());
+            List<EnumMap<OrderFieldsEnum, Object>> ordersToConvert = future.get();
+            if (ordersToConvert == null) return null;
+
+            return converter.convert(ordersToConvert);
         }
     }
 
@@ -121,7 +108,11 @@ public class ParserProcessor {
         @Override
         public void run() {
             try {
-                outputService.printOrdersParserResult(future.get());
+                List<OrderView> ordersToPrint = future.get();
+                if (ordersToPrint == null) return;
+
+                outputService.printOrdersParserResult(ordersToPrint);
+
             } catch (InterruptedException e) {
                 System.out.println("printing of orders failed due to thread exception!");
                 future.cancel(true);

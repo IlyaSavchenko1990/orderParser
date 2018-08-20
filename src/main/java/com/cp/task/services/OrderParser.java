@@ -24,8 +24,8 @@ public interface OrderParser {
     List<EnumMap<OrderFieldsEnum, Object>> parse(String fileName);
 
     /**
-     * @param fileExtension File extension name
-     * @return Returns true if implementation able to parse files with given extension
+     * @param fileName File name
+     * @return Returns true if implementation able to parse given file
      */
-    boolean checkExtension(String fileExtension);
+    boolean checkFileExtension(String fileName);
 }

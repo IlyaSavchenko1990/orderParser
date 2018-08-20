@@ -10,6 +10,7 @@ public enum ErrorMessagesEnum {
     fileNotFound("file not found!"),
     wrongFormat("parsing error - wrong format!"),
     wrongFileNameFormat("wrong file name format!"),
+    unsupportedFileFormat("unsupported file format!"),
     fieldIsNull("field is null!"),
     fieldNotValid("field not valid!");
 
